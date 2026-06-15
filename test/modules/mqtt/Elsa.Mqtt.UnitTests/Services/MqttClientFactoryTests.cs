@@ -6,7 +6,7 @@ namespace Elsa.Mqtt.UnitTests.Services;
 
 public class MqttClientFactoryTests
 {
-    // ---------- ClientClientAsync ----------
+    // ---------- CreateClientAsync ----------
 
     // NOTE: This method is not testable in a unit test because it actually attempts to connect with the created client.
 

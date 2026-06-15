@@ -57,11 +57,11 @@ public class MqttConnectionOptions
 
                 if (!string.IsNullOrEmpty(ClientCertificatePath))
                 {
-#if (NET9_0_OR_GREATER)
+#if NET9_0_OR_GREATER
                     var cert = string.IsNullOrEmpty(ClientCertificatePassword)
                         ? X509CertificateLoader.LoadCertificateFromFile(path: ClientCertificatePath)
                         : X509CertificateLoader.LoadPkcs12FromFile(path: ClientCertificatePath, password: ClientCertificatePassword);
-#else                       
+#else
                     var cert = string.IsNullOrEmpty(ClientCertificatePassword)
                         ? new X509Certificate2(fileName: ClientCertificatePath)
                         : new X509Certificate2(fileName: ClientCertificatePath, password: ClientCertificatePassword);

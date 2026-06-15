@@ -60,18 +60,23 @@ internal class MqttClientFactory : IMqttClientFactory, IDisposable
             var connectionOptions = ResolveConnection(connectionName);
             var newConnection = new MQTTnet.MqttClientFactory().CreateMqttClient();
 
-            var response = await newConnection.ConnectAsync(connectionOptions, cancellationToken);
-
-            if (response?.ResultCode != MqttClientConnectResultCode.Success)
+            try
             {
-                throw new InvalidOperationException(
-                    $"Failed to connect to MQTT broker for connection '{connectionName}'. " +
-                    $"Result code: {response?.ResultCode}");
-            }
+                var response = await newConnection.ConnectAsync(connectionOptions, cancellationToken);
 
-            _connections.Add(connectionName, newConnection);
+                if (response?.ResultCode != MqttClientConnectResultCode.Success)
+                    throw new InvalidOperationException(
+                        $"Failed to connect to MQTT broker for connection '{connectionName}'. Result code: {response?.ResultCode}");
 
-            return newConnection;
+                _connections.Add(connectionName, newConnection);
+
+                return newConnection;
+            }
+            catch
+            {
+                newConnection.Dispose();
+                throw;
+            }
         }
         finally
         {
@@ -90,7 +95,7 @@ internal class MqttClientFactory : IMqttClientFactory, IDisposable
         {
             throw new InvalidOperationException(
                 $"No MQTT connection named '{name}' was found. " +
-                $"Configure connections using UseMqtt(options => options.AddConnection(...)).");
+                "Configure connections using UseMqtt(mqtt => mqtt.ConfigureOptions = o => o.AddConnection(...)).");
         }
 
         return connectionOptions;
