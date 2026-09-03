@@ -48,8 +48,7 @@ public static class MySqlQuartzExtensions
 
     private static void UseMySql(string connectionString, DbContextOptionsBuilder options, Action<DbContextOptionsBuilder>? configureDbContextOptions)
     {
-        // Use MySQL migrations.
-        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), sqlServerDbContextOptionsBuilder => { sqlServerDbContextOptionsBuilder.MigrationsAssembly(typeof(MySqlQuartzDbContext).Assembly.GetName().Name); });
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), mySqlDbContextOptionsBuilder => { mySqlDbContextOptionsBuilder.MigrationsAssembly(typeof(MySqlQuartzDbContext).Assembly.GetName().Name); });
 
         configureDbContextOptions?.Invoke(options);
     }
